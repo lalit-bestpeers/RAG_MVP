@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from app.api import auth, chat, documents, health, sessions
 from app.core.config import settings
 from app.db import models  #  (registers models for Alembic metadata)
+from app.services.local_llm import llm_service
 from app.services.qdrant import qdrant_service
 
 logger = logging.getLogger("rag")
@@ -16,10 +17,9 @@ logger = logging.getLogger("rag")
 async def lifespan(_: FastAPI):
     Path(settings.upload_dir).mkdir(parents=True, exist_ok=True)
     qdrant_service.ensure_collection()
-    if not settings.grok_api_key:
-        logger.warning(
-            "GROK_API_KEY is not configured. Chat requests will fail until it is set in .env."
-        )
+    logger.info("Using local LLM model: %s", settings.llm_model)
+    if settings.llm_preload:
+        llm_service.load(wait=False)
     yield
 
 
