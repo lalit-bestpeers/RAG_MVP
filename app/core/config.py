@@ -27,11 +27,13 @@ class Settings(BaseSettings):
     embedding_base_url: str = ""
     embedding_batch_size: int = 32
 
-    grok_api_key: str = ""
-    grok_base_url: str = "https://api.groq.com/openai/v1"
-    grok_model: str = "openai/gpt-oss-20b"
-    grok_max_tokens: int = 1024
-    grok_temperature: float = 0.1
+    llm_model: str = "Qwen/Qwen2-1.5B-Instruct"
+    llm_device: str = "auto"
+    llm_max_new_tokens: int = 512
+    llm_temperature: float = 0.1
+    llm_torch_dtype: str = "auto"
+    llm_cache_dir: str = "/app/model_cache"
+    llm_preload: bool = True
 
     chunk_size: int = 1000
     chunk_overlap: int = 150

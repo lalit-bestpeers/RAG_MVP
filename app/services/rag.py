@@ -1,6 +1,6 @@
 from app.core.config import settings
 from app.db.models import ChatSession
-from app.services.grok import grok_service
+from app.services.local_llm import llm_service
 from app.services.retriever import retrieve
 
 NOT_FOUND = "I could not find the answer in the provided documents."
@@ -24,7 +24,7 @@ def answer_question(session: ChatSession, question: str) -> tuple[str, list[dict
         for i, result in enumerate(results, start=1)
     )
     prompt = f"Document excerpts:\n\n{context}\n\nQuestion: {question}\n\nAnswer:"
-    answer = grok_service.generate(SYSTEM_PROMPT, prompt).strip()
+    answer = llm_service.generate(SYSTEM_PROMPT, prompt).strip()
 
     if not answer:
         answer = NOT_FOUND
